@@ -1,18 +1,33 @@
 package main
 
 import (
+    "fmt"
     "html/template"
     "log"
     "net/http"
     "os"
+
+    "github.com/KhaledMahmudRiad-105/project250/internal/db"
 )
 
 func main() {
     port := os.Getenv("PORT")
-
     if port == "" {
         port = "8080"
     }
+
+    dbPath := os.Getenv("DB_PATH")
+    if dbPath == "" {
+        dbPath = "./school.db"
+    }
+
+    database, err := db.Open(dbPath)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer database.Close()
+
+    log.Println("Database connected successfully")
 
     page, err := template.ParseFiles("templates/index.html")
     if err != nil {
@@ -22,7 +37,12 @@ func main() {
     mux := http.NewServeMux()
 
     mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
-        w.Write([]byte("ok"))
+        if err := database.Ping(); err != nil {
+            http.Error(w, "Database unavailable", http.StatusServiceUnavailable)
+            return
+        }
+
+        fmt.Fprint(w, "ok")
     })
 
     mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
@@ -31,9 +51,8 @@ func main() {
             return
         }
 
-        err := page.Execute(w, nil)
-        if err != nil {
-            log.Println(err)
+        if err := page.Execute(w, nil); err != nil {
+            log.Println("Rendering home page:", err)
         }
     })
 
