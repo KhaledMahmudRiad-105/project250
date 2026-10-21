@@ -8,6 +8,7 @@ import (
     "os"
 
     "github.com/KhaledMahmudRiad-105/project250/internal/db"
+    "github.com/KhaledMahmudRiad-105/project250/internal/handlers"
 )
 
 func main() {
@@ -27,9 +28,12 @@ func main() {
     }
     defer database.Close()
 
-    log.Println("Database connected successfully")
-
     page, err := template.ParseFiles("templates/index.html")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    studentHandler, err := handlers.NewStudentHandler(database)
     if err != nil {
         log.Fatal(err)
     }
@@ -55,6 +59,9 @@ func main() {
             log.Println("Rendering home page:", err)
         }
     })
+
+    mux.HandleFunc("GET /students", studentHandler.List)
+    mux.HandleFunc("POST /students", studentHandler.Create)
 
     log.Printf("Server running at http://localhost:%s\n", port)
     log.Fatal(http.ListenAndServe(":"+port, mux))
