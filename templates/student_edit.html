@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Student | Project250</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f7fb; padding: 30px 20px; color: #1f2937; }
+        .card { max-width: 600px; margin: auto; padding: 28px; background: white; border-radius: 12px; }
+        input { box-sizing: border-box; width: 100%; padding: 10px; margin: 6px 0 16px; border: 1px solid #d1d5db; border-radius: 6px; }
+        button { background: #2563eb; color: white; border: 0; padding: 11px 18px; border-radius: 6px; cursor: pointer; }
+        a { color: #2563eb; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <p><a href="/students">Back to Students</a></p>
+    <h1>Edit Student</h1>
+
+    <form method="POST" action="/students/edit">
+        <input type="hidden" name="id" value="{{.ID}}">
+
+        <label for="name">Student Name</label>
+        <input id="name" name="name" value="{{.Name}}" maxlength="100" required>
+
+        <label for="roll_number">Roll Number</label>
+        <input id="roll_number" name="roll_number" value="{{.RollNumber}}" maxlength="50" required>
+
+        <label for="class_name">Class Name</label>
+        <input id="class_name" name="class_name" value="{{.ClassName}}" maxlength="100" required>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+</body>
+</html>
