@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project250 | Teachers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            margin: 0;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px #00000010;
+        }
+        h1 { color: #2563eb; }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+        th { background: #f3f4f6; }
+        a { color: #2563eb; text-decoration: none; }
+        .message { color: #15803d; }
+        .delete { background: #dc2626; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/">← Dashboard</a>
+
+        <h1>Teacher Management</h1>
+
+        {{if .Message}}
+        <p class="message">{{.Message}}</p>
+        {{end}}
+
+        <h2>Add New Teacher</h2>
+
+        <form method="POST" action="/teachers">
+            <input type="text" name="name" placeholder="Teacher name" maxlength="100" required>
+            <input type="email" name="email" placeholder="Email (optional)" maxlength="254">
+            <button type="submit">Add Teacher</button>
+        </form>
+
+        <h2>Teacher List</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Teachers}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{if .Email}}{{.Email}}{{else}}—{{end}}</td>
+                    <td>
+                        <a href="/teachers/edit?id={{.ID}}">Edit</a>
+
+                        <form method="POST" action="/teachers/delete" style="display:inline"
+                              onsubmit="return confirm('Delete this teacher?')">
+                            <input type="hidden" name="id" value="{{.ID}}">
+                            <button class="delete" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="4">No teachers added yet.</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project250 | Edit Teacher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        a { color: #2563eb; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/teachers">← Back to Teachers</a>
+
+        <h1>Edit Teacher</h1>
+
+        <form method="POST" action="/teachers/edit">
+            <input type="hidden" name="id" value="{{.ID}}">
+
+            <label>Teacher Name</label>
+            <input type="text" name="name" value="{{.Name}}" maxlength="100" required>
+
+            <label>Email</label>
+            <input type="email" name="email" value="{{.Email}}" maxlength="254">
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>
