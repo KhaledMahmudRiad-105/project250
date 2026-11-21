@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Subject | Project250</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Subject</h1>
+
+        <form method="POST" action="/subjects/edit">
+            <input type="hidden" name="id" value="{{.ID}}">
+
+            <label>Subject Name</label>
+            <input type="text" name="name"
+                value="{{.Name}}" maxlength="100" required>
+
+            <button type="submit">Update Subject</button>
+        </form>
+
+        <p><a href="/subjects">Back to Subjects</a></p>
+    </div>
+</body>
+</html>
