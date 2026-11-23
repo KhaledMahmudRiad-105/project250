@@ -48,6 +48,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	teacherSubjectHandler, err := handlers.NewTeacherSubjectHandler(database)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
@@ -87,6 +92,10 @@ func main() {
 	mux.HandleFunc("GET /subjects/edit", subjectHandler.EditForm)
 	mux.HandleFunc("POST /subjects/edit", subjectHandler.Update)
 	mux.HandleFunc("POST /subjects/delete", subjectHandler.Delete)
+
+	mux.HandleFunc("GET /teacher-subjects", teacherSubjectHandler.List)
+	mux.HandleFunc("POST /teacher-subjects/assign", teacherSubjectHandler.Assign)
+	mux.HandleFunc("POST /teacher-subjects/remove", teacherSubjectHandler.Remove)
 
 	log.Printf("Server running at http://localhost:%s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, mux))

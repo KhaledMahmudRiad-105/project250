@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher-Subject Assignment | Project250</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            margin: 0;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px #00000010;
+        }
+
+        h1 { color: #2563eb; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th { background: #f3f4f6; }
+
+        select {
+            padding: 9px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            min-width: 180px;
+        }
+
+        button {
+            padding: 9px 14px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        .remove {
+            background: #dc2626;
+        }
+
+        .message {
+            color: #15803d;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .unassigned {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/">← Dashboard</a>
+
+        <h1>Teacher-Subject Assignment</h1>
+        <p>Assign one subject to each teacher.</p>
+
+        {{if .Message}}
+        <p class="message">{{.Message}}</p>
+        {{end}}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Teacher</th>
+                    <th>Current Subject</th>
+                    <th>Assign / Change</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{range .Assignments}}
+                <tr>
+                    <td>{{.TeacherName}}</td>
+
+                    <td>
+                        {{if .Assigned}}
+                            {{.SubjectName}}
+                        {{else}}
+                            <span class="unassigned">Not assigned</span>
+                        {{end}}
+                    </td>
+
+                    <td>
+                        <form method="POST" action="/teacher-subjects/assign">
+                            <input type="hidden" name="teacher_id" value="{{.TeacherID}}">
+
+                            <select name="subject_id" required>
+                                <option value="">Select subject</option>
+                                {{range $.Subjects}}
+                                <option value="{{.ID}}">{{.Name}}</option>
+                                {{end}}
+                            </select>
+
+                            <button type="submit">Assign</button>
+                        </form>
+                    </td>
+
+                    <td>
+                        {{if .Assigned}}
+                        <form method="POST" action="/teacher-subjects/remove"
+                              onsubmit="return confirm('Remove this subject assignment?')">
+                            <input type="hidden" name="teacher_id" value="{{.TeacherID}}">
+                            <button type="submit" class="remove">Remove</button>
+                        </form>
+                        {{else}}
+                            —
+                        {{end}}
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="4">No teachers found.</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+
+        <p><a href="/teachers">Manage Teachers</a> | <a href="/subjects">Manage Subjects</a></p>
+    </div>
+</body>
+</html>
